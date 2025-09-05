@@ -1,8 +1,8 @@
 // import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import BunnyStreamService from 'App/Services/BunnyStreamService'
 import VideoUploadValidator from 'App/Validators/VideoUploadValidator'
 import VideoUpdateValidator from 'App/Validators/VideoUpdateValidator'
+import BunnyStreamService from 'App/Services/BunnyStreamService'
 
 export default class VideosController {
   private bunnyStreamService: BunnyStreamService
