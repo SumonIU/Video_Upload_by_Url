@@ -1,7 +1,4 @@
-// import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import VideoUploadValidator from 'App/Validators/VideoUploadValidator'
-import VideoUpdateValidator from 'App/Validators/VideoUpdateValidator'
 import BunnyStreamService from 'App/Services/BunnyStreamService'
 
 export default class VideosController {
@@ -16,9 +13,8 @@ export default class VideosController {
    */
   public async uploadFromUrl({ request, response }: HttpContextContract) {
     try {
-      // Validate request data
-      const payload = await request.validate(VideoUploadValidator)
-      const { videoUrl, title, collectionId } = payload
+      // Get request data
+      const { videoUrl, title, collectionId } = request.all()
 
       // Create video in Bunny Stream
       const video = await this.bunnyStreamService.createVideo(title, collectionId)
@@ -109,8 +105,8 @@ export default class VideosController {
   public async update({ params, request, response }: HttpContextContract) {
     try {
       const videoId = params.id
-      // Validate request data
-      const updates = await request.validate(VideoUpdateValidator)
+      // Get request data
+      const updates = request.all()
 
       if (!videoId) {
         return response.badRequest({
