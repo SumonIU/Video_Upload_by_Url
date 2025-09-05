@@ -1,5 +1,5 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import BunnyStreamService from 'App/Services/BunnyStreamService'
+import BunnyStreamService from 'App/Controllers/Http/VideosService'
 
 export default class VideosController {
   private bunnyStreamService: BunnyStreamService
@@ -8,9 +8,6 @@ export default class VideosController {
     this.bunnyStreamService = new BunnyStreamService()
   }
 
-  /**
-   * Upload video from URL to Bunny.net
-   */
   public async uploadFromUrl({ request, response }: HttpContextContract) {
     try {
       // Get request data
@@ -28,7 +25,7 @@ export default class VideosController {
           videoId: video.guid,
           title: video.title,
           uploadTask: uploadResult.task,
-          // video,
+          video,
         },
       })
     } catch (error) {
@@ -39,9 +36,6 @@ export default class VideosController {
     }
   }
 
-  /**
-   * Get video details
-   */
   public async show({ params, response }: HttpContextContract) {
     try {
       const videoId = params.id
@@ -66,9 +60,6 @@ export default class VideosController {
     }
   }
 
-  /**
-   * List all videos
-   */
   public async index({ request, response }: HttpContextContract) {
     try {
       const {
@@ -99,9 +90,6 @@ export default class VideosController {
     }
   }
 
-  /**
-   * Update video details
-   */
   public async update({ params, request, response }: HttpContextContract) {
     try {
       const videoId = params.id
@@ -128,9 +116,6 @@ export default class VideosController {
     }
   }
 
-  /**
-   * Delete video
-   */
   public async destroy({ params, response }: HttpContextContract) {
     try {
       const videoId = params.id

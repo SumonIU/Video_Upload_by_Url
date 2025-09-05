@@ -46,9 +46,6 @@ export default class BunnyStreamService {
     this.baseUrl = Env.get('BUNNY_STREAM_BASE_URL', 'https://video.bunnycdn.com')
   }
 
-  /**
-   * Create a new video in Bunny Stream
-   */
   public async createVideo(title: string, collectionId?: string): Promise<BunnyVideoUploadResponse> {
     try {
       const requestBody: any = { title }
@@ -73,9 +70,6 @@ export default class BunnyStreamService {
     }
   }
 
-  /**
-   * Upload video from URL to Bunny Stream
-   */
   public async uploadVideoFromUrl(
     videoId: string,
     videoUrl: string
@@ -102,9 +96,6 @@ export default class BunnyStreamService {
     }
   }
 
-  /**
-   * Get video details
-   */
   public async getVideo(videoId: string): Promise<BunnyVideoUploadResponse> {
     try {
       const response: AxiosResponse<BunnyVideoUploadResponse> = await axios.get(
@@ -122,9 +113,6 @@ export default class BunnyStreamService {
     }
   }
 
-  /**
-   * Delete video from Bunny Stream
-   */
   public async deleteVideo(videoId: string): Promise<{ message: string }> {
     try {
       const response = await axios.delete(
@@ -142,9 +130,6 @@ export default class BunnyStreamService {
     }
   }
 
-  /**
-   * List all videos in the library
-   */
   public async listVideos(
     page: number = 1,
     itemsPerPage: number = 100,
@@ -182,9 +167,6 @@ export default class BunnyStreamService {
     }
   }
 
-  /**
-   * Update video details
-   */
   public async updateVideo(
     videoId: string,
     updates: {
