@@ -25,4 +25,4 @@ Route.get('/', async () => {
 })
 
 // Import video routes
-import '../app/Controllers/Http/VideosRoutes'
+import '../app/Controllers/Http/Videos/VideosRoutes'

@@ -1,5 +1,5 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import BunnyStreamService from 'App/Controllers/Http/VideosService'
+import BunnyStreamService from 'App/Controllers/Http/Videos/VideosService'
 
 export default class VideosController {
   private bunnyStreamService: BunnyStreamService

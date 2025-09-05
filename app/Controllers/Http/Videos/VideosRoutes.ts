@@ -9,4 +9,7 @@ Route.group(() => {
   Route.get('/videos/:id', 'VideosController.show')
   Route.put('/videos/:id', 'VideosController.update')
   Route.delete('/videos/:id', 'VideosController.destroy')
-}).prefix('/api/v1')
+  Route.post('/webhook','WebhookController.webhook')
+})
+.prefix('/api/v1')
+.namespace('App/Controllers/Http/Videos')
