@@ -9,6 +9,9 @@ export default class VideoInfo extends BaseModel {
   public video_id: string   // maps to video_id in DB
 
   @column()
+  public library_id: string
+
+  @column()
   public title: string
 
   @column()

@@ -105,6 +105,7 @@ export default class BunnyStreamService {
       //storing in mysql
       await VideoInfo.create({
         video_id: videoId,
+        library_id:this.libraryId,
         title: title,
         status: "uploading",
       });
