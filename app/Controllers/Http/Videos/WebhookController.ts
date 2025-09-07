@@ -1,6 +1,7 @@
+import BunnyStreamService from "App/Controllers/Http/Videos/VideosService";
 import chalk from "chalk";
 import type { HttpContextContract } from "@ioc:Adonis/Core/HttpContext";
-import VideosQuery from "./VideosQuery";
+import videosService from './VideosService'
 export default class WebhookController {
   public async webhook({ request, response }: HttpContextContract) {
     console.log("Webhook received:");
@@ -26,9 +27,15 @@ export default class WebhookController {
     }
 
     // Respond 200 OK to Bunny.net
-    if (videoId && (dbStatus=='success' || dbStatus=='failed')) {
-      const updates = { status: dbStatus };
-      await VideosQuery.updateStatus(videoId, updates);
+    if (videoId && (dbStatus == "success" || dbStatus == "failed")) {
+      const bunnyService = new BunnyStreamService();
+      const videoData = await bunnyService.getVideo(videoId);
+      const updates = {
+        status: dbStatus,
+        category:videoData.category,
+        duration: videoData.length || 0,
+      };
+      await videosService.updateStatus(videoId, updates);
     }
 
     return response.status(200).send("OK");

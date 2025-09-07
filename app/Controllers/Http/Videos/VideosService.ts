@@ -39,7 +39,7 @@ export interface BunnyUploadUrlResponse {
 
 export default class BunnyStreamService {
   private apiKey: string;
-  private libraryId: string;
+  private libraryId: number;
   private baseUrl: string;
 
   constructor() {
@@ -105,8 +105,10 @@ export default class BunnyStreamService {
       //storing in mysql
       await VideoInfo.create({
         video_id: videoId,
-        library_id:this.libraryId,
+        library_id: this.libraryId,
+        duration: 0,
         title: title,
+        category: "uncategories",
         status: "uploading",
       });
 
@@ -242,5 +244,16 @@ export default class BunnyStreamService {
         }`
       );
     }
+  }
+
+  public static async updateStatus(
+    videoId: string,
+    updates: {
+      status: string;
+      category: string;
+      duration: number;
+    }
+  ) {
+    await VideosQuery.updateVideo(videoId, updates);
   }
 }

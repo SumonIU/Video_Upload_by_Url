@@ -10,20 +10,12 @@ export default class VideosQuery {
     }
   }
 
-  //Update a video record in MySQL by video_id
-  public static async updateVideo(videoId: string, updates: Partial<{ title: string; status: string }>) {
+  //Update a video title record in MySQL by video_id
+  public static async updateVideo(videoId: string, updates: any) {
     const videoInfo = await VideoInfo.findBy('video_id', videoId)
     if (videoInfo) {
       Object.assign(videoInfo, updates)  // dynamically update fields
       await videoInfo.save()
-    }
-  }
-
-  public static async updateStatus(videoId:string,updates:Partial<{status:string}>){
-    const videoInfo=await VideoInfo.findBy('video_id',videoId);
-    if(videoInfo){
-        Object.assign(videoInfo,updates)
-        await videoInfo.save();
     }
   }
 
