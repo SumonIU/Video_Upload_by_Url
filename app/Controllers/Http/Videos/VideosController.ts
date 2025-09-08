@@ -11,14 +11,11 @@ export default class VideosController {
   }
 
   public async uploadFromUrl({ request, response }: HttpContextContract) {
+    //validation check
     const payload = await request.validate(this.validator.uploadFromUrl);
 
-    // const { videoUrl, title} = request.all();
-
-    // Create video in Bunny Stream
     const video = await this.bunnyStreamService.createVideo(payload.title);
-
-    // Upload video from URL
+    //upload video in bunny.net
     await this.bunnyStreamService.uploadVideoFromUrl(
       video.guid,
       payload.videoUrl,
