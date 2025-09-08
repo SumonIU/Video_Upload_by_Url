@@ -165,30 +165,10 @@ export default class BunnyStreamService {
     }
   }
 
-  public async listVideos(
-    page: number = 1,
-    itemsPerPage: number = 100,
-    search?: string,
-    collection?: string,
-    orderBy?: string
-  ): Promise<{
-    items: BunnyVideoUploadResponse[];
-    currentPage: number;
-    itemsPerPage: number;
-    totalItems: number;
-  }> {
+  public async listVideos() {
     try {
-      const params = new URLSearchParams({
-        page: page.toString(),
-        itemsPerPage: itemsPerPage.toString(),
-      });
-
-      if (search) params.append("search", search);
-      if (collection) params.append("collection", collection);
-      if (orderBy) params.append("orderBy", orderBy);
-
       const response = await axios.get(
-        `${this.baseUrl}/library/${this.libraryId}/videos?${params.toString()}`,
+        `${this.baseUrl}/library/${this.libraryId}/videos`,
         {
           headers: {
             AccessKey: this.apiKey,

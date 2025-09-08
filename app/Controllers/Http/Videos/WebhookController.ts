@@ -17,9 +17,9 @@ export default class WebhookController {
     } else if (Status === 2) {
       console.log(`video is encoding`);
     } else if (Status === 3) {
-      dbStatus = "success";
       console.log(`video encoding has finished`);
     } else if (Status === 4) {
+      dbStatus='success';
       console.log(chalk.green(`video Resolution finished`));
     } else if (Status === 5) {
       dbStatus = "failed";

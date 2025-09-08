@@ -67,27 +67,8 @@ export default class VideosController {
 
   public async index({ request, response }: HttpContextContract) {
     try {
-      const {
-        page = 1,
-        itemsPerPage = 10,
-        search,
-        collection,
-        orderBy,
-      } = request.only([
-        "page",
-        "itemsPerPage",
-        "search",
-        "collection",
-        "orderBy",
-      ]);
 
-      const videos = await this.bunnyStreamService.listVideos(
-        Number(page),
-        Number(itemsPerPage),
-        search,
-        collection,
-        orderBy
-      );
+      const videos = await this.bunnyStreamService.listVideos();
 
       return response.ok({
         message: "Videos retrieved successfully",
