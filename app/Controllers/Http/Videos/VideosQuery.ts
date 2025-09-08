@@ -1,22 +1,41 @@
-import VideoInfo from 'App/Models/VideoInfo'
-
+import VideoInfo from "App/Models/VideoInfo";
 export default class VideosQuery {
-  
-  // Delete a video record from MySQL by video_id
-  public static async deleteVideoById(videoId: string) {
-    const videoInfo = await VideoInfo.findBy('video_id', videoId)
-    if (videoInfo) {
-      await videoInfo.delete()
-    }
+
+  public async store(
+    video_id: string,
+    library_id: number,
+    duration: number,
+    title: string,
+    category: string,
+    status: string
+  ) {
+    return await VideoInfo.create({
+      video_id,
+      library_id,
+      duration,
+      title,
+      category,
+      status,
+    });
+  }
+  public async getVideo(videoId: string) {
+    return await VideoInfo.query()
+      .select("video_id")
+      .where("video_id", videoId)
+      .first();
   }
 
-  //Update a video title record in MySQL by video_id
-  public static async updateVideo(videoId: string, updates: any) {
-    const videoInfo = await VideoInfo.findBy('video_id', videoId)
-    if (videoInfo) {
-      Object.assign(videoInfo, updates)  // dynamically update fields
-      await videoInfo.save()
-    }
+  public async deleteVideo(videoId: string) {
+    return await VideoInfo.query().where("video_id", videoId).delete();
   }
 
+  public async updateVideo(videoId: string, updates: any) {
+    const video = await VideoInfo.findBy("video_id", videoId);
+    video?.merge(updates);
+    return await video?.save();
+  }
+
+  public async getAllVideo() {
+    return await VideoInfo.query();
+  }
 }
