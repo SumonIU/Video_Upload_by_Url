@@ -1,55 +1,36 @@
 import type { HttpContextContract } from "@ioc:Adonis/Core/HttpContext";
-import BunnyStreamService from "App/Controllers/Http/Videos/VideosService";
+import BunnyVideoService from "App/Controllers/Http/Videos/VideosService";
 import VideoValidator from "./VideosValidator";
 export default class VideosController {
-  private bunnyStreamService: BunnyStreamService;
+  private videoService: BunnyVideoService;
   private validator: VideoValidator;
 
   constructor() {
-    this.bunnyStreamService = new BunnyStreamService();
+    this.videoService = new BunnyVideoService();
     this.validator = new VideoValidator();
   }
 
-  public async uploadFromUrl({ request, response }: HttpContextContract) {
-    //validation check
-    const payload = await request.validate(this.validator.uploadFromUrl);
-
-    const video = await this.bunnyStreamService.createVideo(payload.title);
-    //upload video in bunny.net
-    await this.bunnyStreamService.uploadVideoFromUrl(
-      video.guid,
-      payload.videoUrl,
-      payload.title
-    );
-    return response.ok({
+  public async uploadVideoByUrl(ctx: HttpContextContract) {
+    const payload =await this.validator.uploadVideoValidator(ctx);
+    await this.videoService.uploadVideo(payload);
+    return ctx.response.ok({
       message: "Video upload initiated successfully",
-      data: {
-        videoId: video.guid,
-        title: video.title,
-        video,
-      },
     });
   }
 
-  public async show({ params, request, response }: HttpContextContract) {
+  public async showSingleVideo(ctx: HttpContextContract) {
+    const payload = this.validator.videoIdValidator(ctx);
+    const video = await this.videoService.getVideo(payload);
 
-    const payload = await request.validate({
-      ...this.validator.check,
-      data: { videoId: params.id },
-    });
-    const videoId = params.id;
-
-    const video = await this.bunnyStreamService.getVideo(videoId);
-
-    return response.ok({
+    return ctx.response.ok({
       message: "Video retrieved successfully",
       data: video,
     });
   }
 
-  public async index({ response }: HttpContextContract) {
+  public async showAllVideos({ response }: HttpContextContract) {
     try {
-      const videos = await this.bunnyStreamService.listVideos();
+      const videos = await this.videoService.listVideos();
 
       return response.ok({
         message: "Videos retrieved successfully",
@@ -63,38 +44,28 @@ export default class VideosController {
     }
   }
 
-  public async update({ params, request, response }: HttpContextContract) {
-    const payload = await request.validate({
-      ...this.validator.updateVideo,
-      data: { ...request.all(), videoId: params.id },
-    });
-    const videoId = params.id;
-    const { title, status, category, duration } = payload;
-    const updates = {
-      title,
-      status,
-      category,
-      duration,
-    };
-    //updating in the bunny.net
-    const video = await this.bunnyStreamService.updateVideo(videoId, updates);
+  public async updateVideo(ctx: HttpContextContract) {
+    const payload =await this.validator.updateVideoValidator(ctx);
 
-    return response.ok({
+    await this.videoService.updateVideo(payload);
+
+    return ctx.response.ok({
       message: "Video updated successfully",
-      data: video,
     });
   }
 
-  public async destroy({ params, request, response }: HttpContextContract) {
-    const payload = await request.validate({
-      ...this.validator.check,
-      data: { videoId: params.id },
-    });
-    const videoId = params.id;
-    //deleting from the bunny.net
-    await this.bunnyStreamService.deleteVideo(videoId);
-    return response.ok({
+  public async destroyVideo(ctx: HttpContextContract) {
+    const payload =await this.validator.videoIdValidator(ctx);
+    await this.videoService.deleteVideo(payload);
+    return ctx.response.ok({
       message: "Video deleted successfully",
     });
   }
+
+  public async BunnyWebHookResponse(ctx: HttpContextContract) {
+    const payload=await this.validator.webHookValidator(ctx);
+    this.videoService.updateVideoStatus(payload);
+    return ctx.response.status(200).send("OK");
+  }
 }
+

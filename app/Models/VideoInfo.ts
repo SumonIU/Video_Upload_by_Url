@@ -6,7 +6,8 @@ export default class VideoInfo extends BaseModel {
   // @column({ isPrimary: true })
   // public id: number
    @column({isPrimary: true})
-  public video_id: string   // maps to video_id in DB
+  public video_id: string 
+  public videoId: string  
 
   @column()
   public library_id: number

@@ -1,6 +1,5 @@
 import VideoInfo from "App/Models/VideoInfo";
 export default class VideosQuery {
-
   public async store(
     video_id: string,
     library_id: number,
@@ -30,9 +29,7 @@ export default class VideosQuery {
   }
 
   public async updateVideo(videoId: string, updates: any) {
-    const video = await VideoInfo.findBy("video_id", videoId);
-    video?.merge(updates);
-    return await video?.save();
+    return await VideoInfo.query().where("video_id", videoId).update(updates);
   }
 
   public async getAllVideo() {
