@@ -203,14 +203,15 @@ export default class BunnyStreamService {
     if (!video) {
       throw new Exception("Video Not Found", 400, "E_INVALID_REQUEST");
     }
-
+    
     //update in MySQL
     await this.videoQuery.updateVideo(videoId, updates);
+
     //update in Bunny
     return await this.updateVideoInBunny(videoId, updates);
   }
 
-  public async updateVideoStatus(payload) {
+  public async updateVideoStatus(payload:any) {
     const { VideoGuid, Status } = payload;
     const videoId = VideoGuid;
     let dbStatus = "uploading";

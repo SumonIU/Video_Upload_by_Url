@@ -47,11 +47,7 @@ export default class VideosController {
   public async updateVideo(ctx: HttpContextContract) {
     const payload =await this.validator.updateVideoValidator(ctx);
 
-    await this.videoService.updateVideo(payload);
-
-    return ctx.response.ok({
-      message: "Video updated successfully",
-    });
+    return await this.videoService.updateVideo(payload);
   }
 
   public async destroyVideo(ctx: HttpContextContract) {
