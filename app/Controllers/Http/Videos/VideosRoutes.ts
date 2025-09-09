@@ -7,8 +7,8 @@ Route.group(() => {
   // Video CRUD operations
   Route.get('/videos', 'VideosController.index')
   Route.get('/videos/:id', 'VideosController.show')
-  Route.put('/videos/:id', 'VideosController.update')
-  Route.delete('/videos/:id', 'VideosController.destroy')
+  Route.post('/update/:id', 'VideosController.update')
+  Route.post('/delete/:id', 'VideosController.destroy')
   Route.post('/webhook','WebhookController.webhook')
 })
 .prefix('/api/v1')
