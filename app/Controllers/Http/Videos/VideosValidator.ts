@@ -10,6 +10,7 @@ export default class VideoValidator {
       messages: {
         "videoUrl.required": "Video URL is required",
         "videoUrl.url": "Please provide a valid video URL",
+
         "title.required": "Title is required",
         "title.maxLength": "Title must not exceed 255 characters",
       },
@@ -25,16 +26,20 @@ export default class VideoValidator {
         status: schema.enum.optional([
           "success",
           "failed",
-          "Uploading",
+          "uploading",
         ] as const),
         category: schema.string.optional({}, [rules.maxLength(100)]),
         duration: schema.number.optional(),
       }),
       messages: {
         "videoId.required": "Video ID is required",
+
         "title.maxLength": "Title must not exceed 255 characters",
+
         "status.enum": "Status must be one of Uploading, Processing, or Ready",
+
         "category.maxLength": "Category must not exceed 100 characters",
+
         "duration.number": "Duration must be a number",
       },
     });
@@ -49,6 +54,7 @@ export default class VideoValidator {
       messages: {
         "VideoGuid.required": "Video GUID is required",
         "VideoGuid.uuid":"Video GUID must be a valid uuid formate",
+
         "Status.required": "Status is required",
         "Status.number": "Status must be a number",
         "Status.range": "Status must be between 0 and 5",

@@ -110,7 +110,7 @@ export default class BunnyStreamService {
   public async uploadVideo(payload) {
     const { title, videoId, dbStatus } = await this.uploadVideoInBunny(payload);
     const video_id = videoId;
-    await this.videoQuery.store(
+    return await this.videoQuery.store(
       video_id,
       this.libraryId,
       0,
@@ -120,15 +120,19 @@ export default class BunnyStreamService {
     );
   }
   public async deleteVideoFromBunny(videoId: string) {
-    await axios.delete(
-      `${this.baseUrl}/library/${this.libraryId}/videos/${videoId}`,
-      {
-        headers: {
-          AccessKey: this.apiKey,
-        },
-      }
-    );
-    return { message: "Video deleted successfully" };
+    try {
+      const res = await axios.delete(
+        `${this.baseUrl}/library/${this.libraryId}/videos/${videoId}`,
+        {
+          headers: {
+            AccessKey: this.apiKey,
+          },
+        }
+      );
+      return res;
+    } catch (error) {
+      throw new Exception("Video Not Found In Bunny", 400, "E_INVALID_REQUEST");
+    }
   }
   public async getVideo(payload) {
     const { videoId } = payload;
@@ -156,7 +160,7 @@ export default class BunnyStreamService {
     }
   }
 
-  public async deleteVideo(payload:any) {
+  public async deleteVideo(payload: any) {
     const { videoId } = payload;
 
     const video = await this.videoQuery.getVideo(videoId);
@@ -165,12 +169,13 @@ export default class BunnyStreamService {
     }
     await this.videoQuery.deleteVideo(videoId);
 
-    const exist = await this.getVideoFromBunny(videoId);
+    const videoInBunny = await this.getVideoFromBunny(videoId);
 
-    if (!exist) {
+    if (!videoInBunny) {
       throw new Exception("Video Not Found In Bunny", 400, "E_INVALID_REQUEST");
     }
     await this.deleteVideoFromBunny(videoId);
+    return video;
   }
 
   public async listVideos() {
@@ -178,7 +183,8 @@ export default class BunnyStreamService {
   }
 
   public async updateVideoInBunny(videoId: string, updates: any) {
-    const response: AxiosResponse<BunnyVideoUploadResponse> = await axios.post(
+    try{
+      const response: AxiosResponse<BunnyVideoUploadResponse> = await axios.post(
       `${this.baseUrl}/library/${this.libraryId}/videos/${videoId}`,
       updates,
       {
@@ -189,9 +195,13 @@ export default class BunnyStreamService {
       }
     );
     return response.data;
+    }
+    catch(error){
+      throw new Exception('Failed To Update Video',400,'E_INVALID_REQUEST');
+    }
   }
 
-  public async updateVideo(payload): Promise<BunnyVideoUploadResponse> {
+  public async updateVideo(payload: any) {
     const { videoId, title, category, status, duration } = payload;
     const updates = {
       title,
@@ -203,15 +213,14 @@ export default class BunnyStreamService {
     if (!video) {
       throw new Exception("Video Not Found", 400, "E_INVALID_REQUEST");
     }
-    
-    //update in MySQL
-    await this.videoQuery.updateVideo(videoId, updates);
-
     //update in Bunny
-    return await this.updateVideoInBunny(videoId, updates);
+    await this.updateVideoInBunny(videoId, updates);
+
+    //update in MySQL
+    return await this.videoQuery.updateVideo(videoId, updates);
   }
 
-  public async updateVideoStatus(payload:any) {
+  public async updateVideoStatus(payload: any) {
     const { VideoGuid, Status } = payload;
     const videoId = VideoGuid;
     let dbStatus = "uploading";
