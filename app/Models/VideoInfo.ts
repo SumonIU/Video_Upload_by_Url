@@ -5,12 +5,11 @@ export default class VideoInfo extends BaseModel {
   public static table = 'video_infos1s'
   // @column({ isPrimary: true })
   // public id: number
-   @column({isPrimary: true})
-  public video_id: string 
+   @column({isPrimary: true,columnName:'video_id'})
   public videoId: string  
 
-  @column()
-  public library_id: number
+  @column({columnName:'library_id'})
+  public libraryId: number
 
   @column()
   public duration:number

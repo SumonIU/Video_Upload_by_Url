@@ -1,16 +1,16 @@
 import VideoInfo from "App/Models/VideoInfo";
 export default class VideosQuery {
   public async store(
-    video_id: string,
-    library_id: number,
+    videoId: string,
+    libraryId: number,
     duration: number,
     title: string,
     category: string,
     status: string
   ) {
     return await VideoInfo.create({
-      video_id,
-      library_id,
+      videoId,
+      libraryId,
       duration,
       title,
       category,

@@ -108,8 +108,12 @@ export default class BunnyStreamService {
     }
   }
   public async uploadVideo(payload) {
+
+    //upload video in bunny
     const { title, videoId, dbStatus } = await this.uploadVideoInBunny(payload);
     const video_id = videoId;
+    
+    //upload video in mysql
     return await this.videoQuery.store(
       video_id,
       this.libraryId,
