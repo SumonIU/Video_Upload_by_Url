@@ -10,7 +10,10 @@ export default class VideoValidator {
             requireProtocol: true,
           }),
         ]),
-        title: schema.string({}, [rules.minLength(1), rules.maxLength(255)]),
+        title: schema.string({ trim: true }, [
+          rules.minLength(1),
+          rules.maxLength(255),
+        ]),
       }),
       messages: {
         "videoUrl.required": "Video URL is required",
@@ -28,11 +31,11 @@ export default class VideoValidator {
       data: { ...ctx.request.all(), videoId: ctx.params.id },
       schema: schema.create({
         videoId: schema.string({}, [rules.uuid()]),
-        title: schema.string.optional({}, [
+        title: schema.string.optional({ trim: true }, [
           rules.minLength(1),
           rules.maxLength(255),
         ]),
-        category: schema.string.optional({}, [
+        category: schema.string.optional({ trim: true }, [
           rules.minLength(1),
           rules.maxLength(100),
         ]),

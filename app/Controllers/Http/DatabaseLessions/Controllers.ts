@@ -17,9 +17,10 @@ export default class Controllers {
     if (fullName || avatarUrl) {
       await this.Queries.createProfile(user, { fullName, avatarUrl });
     }
-    return ctx.response.json({
-      user,
-    });
+    return ctx.response.status(201).json({
+      message: "User Created Successfully",
+      user
+    })
   }
 
   public async createPost(ctx: HttpContextContract) {
@@ -38,8 +39,8 @@ export default class Controllers {
     if (!user) {
       throw new Exception("User Not Found", 400, "E_INVALID_REQUEST");
     }
-    return ctx.response.json({
-      user: user,
+    return ctx.response.status(200).json({
+      user
     });
   }
 
