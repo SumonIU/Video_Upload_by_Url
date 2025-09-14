@@ -18,7 +18,7 @@ export default class Queries {
   }
 
   public async getSingleProfile(userId:number){
-    return await Profile.query().where('user_id',userId).first();
+    return await Profile.query().where('user_id',userId).preload('user').where()
   }
 
   public async getAllProfiles(){
