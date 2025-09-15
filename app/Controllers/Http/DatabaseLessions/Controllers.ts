@@ -33,6 +33,31 @@ export default class Controllers {
     return await this.Queries.createPost(user, postData);
   }
 
+  public async createRole(ctx:HttpContextContract){
+    const roleName=await ctx.request.all();
+    return await this.Queries.createRole(roleName);
+  }
+
+  public async removeRoleByUserId(ctx:HttpContextContract){
+    const userid=await ctx.params.id;
+    const {roles}=await ctx.request.all();
+    return await this.Queries.removeRole(userid,roles);
+  }
+
+  public async assignRoleByUserId(ctx:HttpContextContract){
+    const userId=await ctx.params.id;
+    const {roles}=await ctx.request.all();
+    console.log('userid--->',userId);
+    console.log('roles--->',roles);
+    return this.Queries.assignRole(userId,roles);
+  }
+
+  public async syncRoleByUserId(ctx:HttpContextContract){
+    const userId=await ctx.params.id;
+    const {roles}= await ctx.request.all();
+    return this.Queries.syncRole(userId,roles);
+  }
+
   public async getSingleUser(ctx: HttpContextContract) {
     const userId = await ctx.params.id;
     const user = await this.Queries.getSingleUser(userId);
@@ -44,6 +69,11 @@ export default class Controllers {
     });
   }
 
+  public async getSingleProfileByUserId(ctx:HttpContextContract){
+    const userid=await ctx.params.id;
+    return await this.Queries.getSingleProfile(userid);
+  }
+
   public async getSingleUserPosts(ctx:HttpContextContract){
     const userid=await ctx.params.id;
     const user=await this.Queries.getSingleUser(userid);
@@ -53,13 +83,19 @@ export default class Controllers {
     return await this.Queries.getPostByUserId(userid);
 
   }
-  public async getAllUsersPosts() {
-    return await this.Queries.getAllPosts();
+  
+  public async getAllUsersPosts(ctx:HttpContextContract) {
+    const page=await ctx.request.input('page');
+    const limit=await ctx.request.input('limit');
+    return await this.Queries.getAllPosts(page,limit);
   }
-
   public async showAllUsers() {
     const users = await User.query();
     return users;
+  }
+
+  public async countAllUsers(){
+    return await this.Queries.getAllUsersCount();
   }
 
   public async findUserByEmail(ctx: HttpContextContract) {

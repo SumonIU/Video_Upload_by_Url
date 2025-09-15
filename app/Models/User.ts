@@ -1,7 +1,8 @@
 import { DateTime } from 'luxon'
-import { BaseModel, column, HasMany, hasMany, hasOne, HasOne } from '@ioc:Adonis/Lucid/Orm'
+import { BaseModel, column, HasMany, hasMany, hasOne, HasOne, ManyToMany, manyToMany } from '@ioc:Adonis/Lucid/Orm'
 import Profile from './Profile'
 import Post from './Post';
+import Role from './Role';
 export default class User extends BaseModel {
   public static table='users';
   @column({ isPrimary: true })
@@ -26,4 +27,10 @@ export default class User extends BaseModel {
   //one-to-many 
   @hasMany(()=>Post)
   public posts:HasMany<typeof Post>
+  
+  //many-to-many
+  @manyToMany(()=>Role,{
+    pivotTable:'role_users',
+  })
+  public roles:ManyToMany<typeof Role>
 }
